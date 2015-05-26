@@ -91,7 +91,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
         if (gameOver) // starting a new game after the last game ended
         {
             gameOver = false;
-            world = new MyWorld(this, soundManager);
+            world = new MyWorld2(this, soundManager);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread

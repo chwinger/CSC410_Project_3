@@ -17,6 +17,7 @@ public class CreateEnemy extends GameSprite {
         super(theWorld);
         this.position = pos;
         this.collidesWith = 1;
+        this.speed = 300;
         this.substance = 4;
     }
 

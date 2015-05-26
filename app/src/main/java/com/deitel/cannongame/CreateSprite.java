@@ -16,6 +16,7 @@ public class CreateSprite extends GameSprite {
     public CreateSprite(World theWorld){
         super(theWorld);
         this.position = new Point3F(75,270,0);
+        this.speed = 150;
     }
 
     @Override
