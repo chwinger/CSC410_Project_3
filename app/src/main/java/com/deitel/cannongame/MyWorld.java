@@ -18,27 +18,26 @@ import edu.noctrl.craig.generic.World;
  * Created by Christian on 5/13/2015.
  */
 public class MyWorld extends World {
-    JetGameView brain;
+
     public CreateSprite ship;
     public CreateBullet bullet;
     public CreateEnemy enemy;
     ArrayList<GameObject> bulletList = new ArrayList<>();
     ArrayList<GameObject> enemies = new ArrayList<>();
 
-    static String winningState;
-
     private double timeLeft = 15; // time remaining in seconds
 
     final int NUM_ENEMIES = 6;
     Random rand = new Random();
 
-    public MyWorld(StateListener listener, SoundManager sounds,JetGameView view) {
+    public MyWorld(StateListener listener, SoundManager sounds) {
         super(listener, sounds);
-        brain = view;
+        //brain = view;
         ship = new CreateSprite(this);
         this.addObject(ship);
         addEnemies();
         numBullets = 0;
+        totalShots = 0;
         kills = 0;
         remaining = NUM_ENEMIES;
         score = 0;
@@ -48,10 +47,8 @@ public class MyWorld extends World {
     @Override
     public boolean onTouch(View v, MotionEvent event){
         Point3F touch;
-        numBullets++;
         if(event.getActionMasked() == MotionEvent.ACTION_DOWN){
             offScreenBulletCheck();
-
             if(bulletList.size() < 5) {
                 makeBullet();
                 touch = new Point3F(event.getX(), event.getY(), 0f);
@@ -68,6 +65,7 @@ public class MyWorld extends World {
     public void makeBullet(){
         bullet = new CreateBullet(this);
         bulletList.add(bullet);
+        totalShots++;
     }
     @Override
     public void update(float elapsedTimeMS){
@@ -76,7 +74,7 @@ public class MyWorld extends World {
         timeLeft -= (double)interval; //decrease total time from time left
         totalElapsedTime = 15.0 - timeLeft;
         if(timeLeft <= 0.0){
-            brain.onGameOver(true);
+            listener.onGameOver(true);
         }
         for(GameObject obj : objects){
             obj.update(interval);
@@ -84,7 +82,7 @@ public class MyWorld extends World {
         List<GameObject> removed = new ArrayList<>();
         if(remaining == 0){
             winningState="You Won!";
-            brain.onGameOver(true);
+            listener.onGameOver(true);
         }
         //check if any of the enemies were hit but any bullets
         for(GameObject bullet : bulletList){

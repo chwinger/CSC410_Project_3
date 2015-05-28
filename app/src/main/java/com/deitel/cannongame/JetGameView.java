@@ -91,7 +91,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
         if (gameOver) // starting a new game after the last game ended
         {
             gameOver = false;
-            world = new MyWorld(this, soundManager,this);
+            world = new MyWorld(this, soundManager);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread
@@ -102,6 +102,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread*/
         }
+
     } // end method newGame
 
     // display an AlertDialog when the game ends
@@ -115,12 +116,12 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
                         // create dialog displaying String resource for messageId
                         AlertDialog.Builder builder =
                                 new AlertDialog.Builder(getActivity());
-                        //builder.setTitle(getResources().getString(messageId));
+                        builder.setTitle(world.winningState);
 
                         // display number of shots fired and total time elapsed
                         builder.setMessage(getResources().getString(
                                 R.string.results_format,
-                                world.numBullets,
+                                world.totalShots,
                                 world.kills,
                                 world.remaining,
                                 world.score,
@@ -194,7 +195,6 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
             }
         }
     } // end method surfaceDestroyed
-
 
     @Override
     public void onGameOver(boolean lost) {

@@ -29,8 +29,10 @@ public class World implements View.OnTouchListener {
     public static float PIXELS_PER_METER = 64F/30F;//ship len = 30m  ship base = 64px
     public double totalElapsedTime = 0;
     public int width;
-    public int numBullets, kills, remaining, score;
+    public int numBullets, kills, remaining, score, totalShots;
     public int height;
+
+    public String winningState;
     public StateListener listener;
     private SoundManager soundManager;
     public Point3F worldScale = Point3F.identity();
