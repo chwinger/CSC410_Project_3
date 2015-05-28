@@ -97,7 +97,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
             gameThread = new GameThread(holder, world); // create thread
             gameThread.start(); // start the game loop thread
             //MyWorld2
-            world = new MyWorld2(this, soundManager);
+            /*world = new MyWorld2(this, soundManager);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread*/
@@ -120,10 +120,10 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
                         // display number of shots fired and total time elapsed
                         builder.setMessage(getResources().getString(
                                 R.string.results_format,
-                                0,//world.shotsFired,
-                                0,//world.kills,
-                                0,//world.remaining,
-                                0,//world.score,
+                                world.numBullets,
+                                world.kills,
+                                world.remaining,
+                                world.score,
                                 world.totalElapsedTime));
                         builder.setPositiveButton(R.string.reset_game,
                                 new DialogInterface.OnClickListener() {
