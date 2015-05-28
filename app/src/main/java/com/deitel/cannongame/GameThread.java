@@ -42,10 +42,12 @@ public class GameThread extends Thread {
                 long currentTime = System.currentTimeMillis();
                 float elapsedTime = currentTime - previousFrameTime;
                 world.totalElapsedTime += elapsedTime / 1000.0;
-                world.update(elapsedTime); // update game state
+
                 // lock the surfaceHolder for drawing
                 synchronized (surfaceHolder) {
                     world.draw(canvas); // draw using the canvas
+                    world.update(elapsedTime); // update game state
+
                 }
                 world.cullAndAdd();
                 previousFrameTime = currentTime; // update previous time

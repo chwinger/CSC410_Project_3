@@ -1,11 +1,14 @@
 package com.deitel.cannongame;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import edu.noctrl.craig.generic.CollisionDetection;
 import edu.noctrl.craig.generic.GameObject;
 import edu.noctrl.craig.generic.Point3F;
 import edu.noctrl.craig.generic.SoundManager;
@@ -15,27 +18,40 @@ import edu.noctrl.craig.generic.World;
  * Created by Christian on 5/13/2015.
  */
 public class MyWorld extends World {
+    JetGameView brain;
     public CreateSprite ship;
     public CreateBullet bullet;
     public CreateEnemy enemy;
     ArrayList<GameObject> bulletList = new ArrayList<>();
-    int numBullets;
+    ArrayList<GameObject> enemies = new ArrayList<>();
+
+    static String winningState;
+
+    private double timeLeft = 15; // time remaining in seconds
+
     final int NUM_ENEMIES = 6;
     Random rand = new Random();
 
-    public MyWorld(StateListener listener, SoundManager sounds) {
+    public MyWorld(StateListener listener, SoundManager sounds,JetGameView view) {
         super(listener, sounds);
+        brain = view;
         ship = new CreateSprite(this);
         this.addObject(ship);
         addEnemies();
         numBullets = 0;
+        kills = 0;
+        remaining = NUM_ENEMIES;
+        score = 0;
+        winningState = "You Lose!";
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event){
         Point3F touch;
+        numBullets++;
         if(event.getActionMasked() == MotionEvent.ACTION_DOWN){
             offScreenBulletCheck();
+
             if(bulletList.size() < 5) {
                 makeBullet();
                 touch = new Point3F(event.getX(), event.getY(), 0f);
@@ -51,8 +67,45 @@ public class MyWorld extends World {
 
     public void makeBullet(){
         bullet = new CreateBullet(this);
-        numBullets++;
         bulletList.add(bullet);
+    }
+    @Override
+    public void update(float elapsedTimeMS){
+        float interval = elapsedTimeMS / 1000.0F; // convert to seconds
+        //decrease time
+        timeLeft -= (double)interval; //decrease total time from time left
+        totalElapsedTime = 15.0 - timeLeft;
+        if(timeLeft <= 0.0){
+            brain.onGameOver(true);
+        }
+        for(GameObject obj : objects){
+            obj.update(interval);
+        }
+        List<GameObject> removed = new ArrayList<>();
+        if(remaining == 0){
+            winningState="You Won!";
+            brain.onGameOver(true);
+        }
+        //check if any of the enemies were hit but any bullets
+        for(GameObject bullet : bulletList){
+            for(GameObject enemy : enemies){
+                boolean hit = false;
+                if(CollisionDetection.collision(bullet, enemy)){hit = true;}
+                if(hit){
+                    enemy.kill(); //put off screen.
+                    removed.add(enemy);
+                    bullet.kill();
+                    kills += 1;
+                    score += 2;
+                    Log.i("DEBUG", "1 less guy, 1+ enemy, score + 3");
+                }
+            }
+        }
+        //bury the dead.
+        for(GameObject e : removed){
+            remaining -= 1;
+            enemies.remove(e);
+        }
     }
 
     public void offScreenBulletCheck(){
@@ -69,10 +122,12 @@ public class MyWorld extends World {
     }
 
     public void addEnemies(){
-
+        //choose random points and then add enemy ships there.
         for(int i = 0; i < NUM_ENEMIES; i++){
             Point3F pos = new Point3F(rand.nextInt(865) + 75, rand.nextInt(500) + 20, 0);
-            this.addObject(new CreateEnemy(this, pos));
+            GameObject enemy = new CreateEnemy(this, pos);
+            this.addObject(enemy);
+            enemies.add(enemy);
         }
     }
 }
