@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -35,7 +34,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
     private boolean dialogIsDisplayed = false;
 
     // variables for the game loop and tracking statistics
-    private boolean gameOver; // is the game over?
+    private int gameOver = 0; // is the game over?
 
     private int screenWidth;
     private int screenHeight;
@@ -88,19 +87,21 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
 
     // reset all the screen elements and start a new game
     public void newGame(SurfaceHolder holder) {
-        if (gameOver) // starting a new game after the last game ended
+        if (gameOver == 0) // starting a new game after the last game ended
         {
-            gameOver = false;
+            gameOver++;
             world = new MyWorld(this, soundManager);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread
             gameThread.start(); // start the game loop thread
-            //MyWorld2
-            /*world = new MyWorld2(this, soundManager);
+        }
+        else if(gameOver == 1){
+            world = new MyWorld2(this, soundManager);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread*/
+            gameThread.start();
         }
 
     } // end method newGame
@@ -174,7 +175,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (!dialogIsDisplayed) {
-            gameOver = true;
+            gameOver++;
             newGame(holder);
         }
     }
@@ -187,18 +188,14 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
         gameThread.stopGame(); // terminate cannonThread
 
         while (retry) {
-            try {
-                gameThread.join(); // wait for cannonThread to finish
+                newGame(getHolder()); // wait for cannonThread to finish
                 retry = false;
-            } catch (InterruptedException e) {
-                Log.e(TAG, "Thread interrupted", e);
-            }
         }
     } // end method surfaceDestroyed
 
     @Override
     public void onGameOver(boolean lost) {
-        gameOver = true; // the game is over
+        gameOver = 1; // the game is over
         gameThread.stopGame(); // terminate thread
         showGameOverDialog(R.string.lose); // show the losing dialog
     }
