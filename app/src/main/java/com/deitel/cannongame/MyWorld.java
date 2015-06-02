@@ -90,20 +90,22 @@ public class MyWorld extends World {
             for(GameObject enemy : enemies){
                 boolean hit = false;
                 if(CollisionDetection.collision(bullet, enemy)){hit = true;}
+                if(hit)
                 {
+                    enemy.kill();
                     removed.add(enemy);
                     bullet.kill();
-                    kills += 1;
-                    score += 2;
-                    timeLeft += 2.0; //increase time by 2.
                     Log.i("DEBUG", "1 less guy, 1+ enemy, score + 3");
                 }
             }
         }
         //bury the dead
         for(GameObject e : removed) {
+            kills += 1;
             remaining-=1;
-            //add one more!
+            score += 2;
+            timeLeft += 2.0; //increase time by 2
+            //add one more
             enemies.remove(e);
             addEnemies();
         }
