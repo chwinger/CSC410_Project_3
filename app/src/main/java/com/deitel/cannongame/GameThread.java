@@ -47,7 +47,6 @@ public class GameThread extends Thread {
                 synchronized (surfaceHolder) {
                     world.draw(canvas); // draw using the canvas
                     world.update(elapsedTime); // update game state
-
                 }
                 world.cullAndAdd();
                 previousFrameTime = currentTime; // update previous time

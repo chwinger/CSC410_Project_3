@@ -87,23 +87,27 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
 
     // reset all the screen elements and start a new game
     public void newGame(SurfaceHolder holder) {
-        if (gameOver == 0) // starting a new game after the last game ended
-        {
-            gameOver++;
-            world = new MyWorld(this, soundManager,this);
-            world.updateSize(screenWidth, screenHeight);
-            this.setOnTouchListener(world);
-            gameThread = new GameThread(holder, world); // create thread
-            gameThread.start(); // start the game loop thread
+        if(gameOver == 2){
+            // show the game over stage w/ final results.
         }
         else if(gameOver == 1){
-            MyWorld2
             world = new MyWorld2(this, soundManager);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread*/
             gameThread.start();
+            gameOver++;
         }
+        else if (gameOver == 0) // starting a new game after the last game ended
+        {
+            gameOver++;
+            world = new MyWorld(this, soundManager);
+            world.updateSize(screenWidth, screenHeight);
+            this.setOnTouchListener(world);
+            gameThread = new GameThread(holder, world); // create thread
+            gameThread.start(); // start the game loop thread
+        }
+
     } // end method newGame
 
     // display an AlertDialog when the game ends
@@ -117,15 +121,15 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
                         // create dialog displaying String resource for messageId
                         AlertDialog.Builder builder =
                                 new AlertDialog.Builder(getActivity());
-                        //builder.setTitle(getResources().getString(messageId));
+                        builder.setTitle(world.winningState);
 
                         // display number of shots fired and total time elapsed
                         builder.setMessage(getResources().getString(
                                 R.string.results_format,
-                                0,//world.shotsFired,
-                                0,//world.kills,
-                                0,//world.remaining,
-                                0,//world.score,
+                                world.totalShots,
+                                world.kills,
+                                world.remaining,
+                                world.score,
                                 world.totalElapsedTime));
                         builder.setPositiveButton(R.string.reset_game,
                                 new DialogInterface.OnClickListener() {
@@ -192,7 +196,6 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
                 retry = false;
         }
     } // end method surfaceDestroyed
-
 
     @Override
     public void onGameOver(boolean lost) {
