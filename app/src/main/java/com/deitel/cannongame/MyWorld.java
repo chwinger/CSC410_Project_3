@@ -21,25 +21,25 @@ public class MyWorld extends World {
 
     public CreateSprite ship;
     public CreateBullet bullet;
-    public CreateEnemy enemy;
     ArrayList<GameObject> bulletList = new ArrayList<>();
     ArrayList<GameObject> enemies = new ArrayList<>();
 
-    private double timeLeft = 15; // time remaining in seconds
-
+    private double timeLeft = 20; // time remaining in seconds
     final int NUM_ENEMIES = 6;
     Random rand = new Random();
 
     public MyWorld(StateListener listener, SoundManager sounds) {
         super(listener, sounds);
-        //brain = view;
+        for(int i =0; i < NUM_ENEMIES; i++){
+            addEnemies();
+        }
+        soundManager = sounds;
         ship = new CreateSprite(this);
         this.addObject(ship);
-        addEnemies();
         numBullets = 0;
         totalShots = 0;
         kills = 0;
-        remaining = NUM_ENEMIES;
+        remaining = 10;
         score = 0;
         winningState = "You Lose!";
     }
@@ -66,13 +66,14 @@ public class MyWorld extends World {
         bullet = new CreateBullet(this);
         bulletList.add(bullet);
         totalShots++;
+        //soundManager.playSound(SoundManager.FIRE_ID);
     }
     @Override
     public void update(float elapsedTimeMS){
         float interval = elapsedTimeMS / 1000.0F; // convert to seconds
         //decrease time
         timeLeft -= (double)interval; //decrease total time from time left
-        totalElapsedTime = 15.0 - timeLeft;
+        totalElapsedTime = 20.0 - timeLeft;
         if(timeLeft <= 0.0){
             listener.onGameOver(true);
         }
@@ -89,20 +90,22 @@ public class MyWorld extends World {
             for(GameObject enemy : enemies){
                 boolean hit = false;
                 if(CollisionDetection.collision(bullet, enemy)){hit = true;}
-                if(hit){
-                    enemy.kill(); //put off screen.
+                {
                     removed.add(enemy);
                     bullet.kill();
                     kills += 1;
                     score += 2;
+                    timeLeft += 2.0; //increase time by 2.
                     Log.i("DEBUG", "1 less guy, 1+ enemy, score + 3");
                 }
             }
         }
-        //bury the dead.
-        for(GameObject e : removed){
-            remaining -= 1;
+        //bury the dead
+        for(GameObject e : removed) {
+            remaining-=1;
+            //add one more!
             enemies.remove(e);
+            addEnemies();
         }
     }
 
@@ -120,12 +123,9 @@ public class MyWorld extends World {
     }
 
     public void addEnemies(){
-        //choose random points and then add enemy ships there.
-        for(int i = 0; i < NUM_ENEMIES; i++){
-            Point3F pos = new Point3F(rand.nextInt(865) + 75, rand.nextInt(500) + 20, 0);
-            GameObject enemy = new CreateEnemy(this, pos);
-            this.addObject(enemy);
-            enemies.add(enemy);
-        }
+        Point3F pos = new Point3F(rand.nextInt(865) + 75, rand.nextInt(500) + 20, 0);
+        GameObject enemy = new CreateEnemy(this, pos);
+        this.addObject(enemy);
+        enemies.add(enemy);
     }
 }
