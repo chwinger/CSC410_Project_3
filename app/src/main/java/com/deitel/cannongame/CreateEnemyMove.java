@@ -17,13 +17,14 @@ public class CreateEnemyMove extends GameSprite {
     Random rand;
     int randDir;
     boolean hitBound;
-    World world;
 
-    public CreateEnemyMove(World theWorld, Point3F pos) {
+    MyWorld2 worldCreated;
+
+    public CreateEnemyMove(World theWorld, Point3F pos, MyWorld2 theWorld2) {
         super(theWorld);
+        worldCreated = theWorld2;
         rand = new Random((long)pos.X);
         this.position = pos;
-        this.collidesWith = 1;
         this.speed = 220;
         this.baseVelocity = (new Point3F(rand.nextInt(150) - 75, rand.nextInt(100) - 50, 0f)).normalize();
         this.updateVelocity();
@@ -65,9 +66,15 @@ public class CreateEnemyMove extends GameSprite {
             baseVelocity = (new Point3F(baseVelocity.X + (rand.nextInt(200) - 100), baseVelocity.Y + (rand.nextInt(100) - 50), baseVelocity.Z)).normalize();
             this.updateVelocity();
             position.add(velocity.clone().mult(interval));
+            if(randDir < 2){
+                worldCreated.enemyBullet(position.clone());
+            }
         }
         else {
             position.add(velocity.clone().mult(interval));
+            if(randDir > 98){
+                worldCreated.enemyBullet(position.clone());
+            }
             hitBound  = false;
         }
     }
