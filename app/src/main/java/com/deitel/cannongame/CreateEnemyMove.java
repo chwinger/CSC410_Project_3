@@ -17,6 +17,7 @@ public class CreateEnemyMove extends GameSprite {
     Random rand;
     int randDir;
     boolean hitBound;
+    World world;
 
     public CreateEnemyMove(World theWorld, Point3F pos) {
         super(theWorld);
@@ -28,6 +29,7 @@ public class CreateEnemyMove extends GameSprite {
         this.updateVelocity();
         this.substance = 4;
         hitBound = true;
+        world = theWorld;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class CreateEnemyMove extends GameSprite {
     }
 
     @Override
-    public void update(float interval){
+    public void update(float interval) {
         randDir = rand.nextInt(100);
         if(((position.X > 980)
                 || (position.X < 240)
@@ -58,12 +60,13 @@ public class CreateEnemyMove extends GameSprite {
             position.add(velocity.clone().mult(interval));
             hitBound = true;
         }
-        else if(randDir <= 10 && !hitBound){
+        else if(randDir <= 10 && !hitBound) {
+            CreateBullet bullet = new CreateBullet(world);
             baseVelocity = (new Point3F(baseVelocity.X + (rand.nextInt(200) - 100), baseVelocity.Y + (rand.nextInt(100) - 50), baseVelocity.Z)).normalize();
             this.updateVelocity();
             position.add(velocity.clone().mult(interval));
         }
-        else{
+        else {
             position.add(velocity.clone().mult(interval));
             hitBound  = false;
         }

@@ -15,15 +15,14 @@ public class CreateBullet extends GameSprite {
     public static final Rect source = new Rect(256,69,272,76);
     public static final Point3F scale = Point3F.identity();
     World world;
-    public CreateBullet(World theWorld){
+    public CreateBullet(World theWorld) {
         super(theWorld);
         world = theWorld;
         this.speed = 200;
-        this.position = new Point3F(75,270,0);
+        this.position = new Point3F(75, 270, 0);
         this.substance = 1;
         this.collidesWith = 4;
     }
-
     @Override
     public Rect getSource(){
         return source;
