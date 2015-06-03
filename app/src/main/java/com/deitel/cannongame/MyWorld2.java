@@ -78,6 +78,18 @@ public class MyWorld2 extends World {
         bulletList.add(bullet);
     }
 
+    public void enemyBullet(Point3F pos){
+        Point3F enemy = pos;
+        bullet = new CreateBullet(this);
+        this.addObject(bullet);
+        bullet.collidesWith = 2;
+        bullet.substance = 4;
+        bullet.position = enemy;
+        bullet.speed = -350;
+        bullet.baseVelocity = new Point3F(1,0,0);
+        bullet.updateVelocity();
+    }
+
     public void offScreenBulletCheck(){
         ArrayList<GameObject> offScreen = new ArrayList<>();
         for(GameObject b: bulletList){
@@ -94,7 +106,7 @@ public class MyWorld2 extends World {
     public void addEnemies(){
         for(int i = 0; i < NUM_ENEMIES; i++){
             Point3F pos = new Point3F(rand.nextInt(739) + 241, rand.nextInt(329) + 71, 0);
-            this.addObject(new CreateEnemyMove(this, pos));
+            this.addObject(new CreateEnemyMove(this, pos, this));
         }
     }
 }

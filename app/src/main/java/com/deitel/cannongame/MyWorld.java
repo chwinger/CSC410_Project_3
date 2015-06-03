@@ -92,9 +92,7 @@ public class MyWorld extends World {
                 if(CollisionDetection.collision(bullet, enemy)){hit = true;}
                 if(hit)
                 {
-                    enemy.kill();
                     removed.add(enemy);
-                    bullet.kill();
                     Log.i("DEBUG", "1 less guy, 1+ enemy, score + 3");
                 }
             }

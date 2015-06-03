@@ -34,7 +34,7 @@ public class World implements View.OnTouchListener {
 
     public String winningState;
     public StateListener listener;
-    private SoundManager soundManager;
+    public SoundManager soundManager;
     public Point3F worldScale = Point3F.identity();
 
     protected ArrayList<GameObject> objects = new ArrayList<>(1000);
