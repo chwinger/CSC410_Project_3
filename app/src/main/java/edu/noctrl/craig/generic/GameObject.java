@@ -49,7 +49,7 @@ public abstract class GameObject {
     public abstract void draw(Canvas canvas);
     public abstract void cull();
     public void message(int message){}
-    public void collision(GameObject other){this.position = new Point3F(-100, -100, 0);}
+    public void collision(GameObject other){this.position = new Point3F(-100, -100, 0); cull();}
     public boolean isDead(){
         return this.offScreen;
     }

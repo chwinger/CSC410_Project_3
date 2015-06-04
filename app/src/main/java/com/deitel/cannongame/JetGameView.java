@@ -86,7 +86,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
         super.onSizeChanged(w, h, oldw, oldh);
         screenWidth = w; // store CannonView's width
         screenHeight = h; // store CannonView's height
-        newGame(getHolder()); // set up and start a new game
+        //newGame(getHolder()); // set up and start a new game
     } // end method onSizeChanged
 
     // reset all the screen elements and start a new game
@@ -97,11 +97,9 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread*/
             gameThread.start();
-            //gameOver++;
         }
         else if (gameOver == 0) // starting a new game after the last game ended
         {
-            gameOver++;
             world = new MyWorld(this, soundManager);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
@@ -122,7 +120,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
                         // create dialog displaying String resource for messageId
                         AlertDialog.Builder builder =
                                 new AlertDialog.Builder(getActivity());
-                        builder.setTitle(world.winningState);
+                        builder.setTitle(messageId);
 
                         // display number of shots fired and total time elapsed
                         builder.setMessage(getResources().getString(
@@ -132,17 +130,31 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
                                 world.remaining,
                                 world.score,
                                 world.totalElapsedTime));
-                        builder.setPositiveButton(R.string.reset_game,
-                                new DialogInterface.OnClickListener() {
-                                    // called when "Reset Game" Button is pressed
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialogIsDisplayed = false;
-                                        newGame(getHolder()); // set up and start a new game
-                                    }
-                                } // end anonymous inner class
-                        ); // end call to setPositiveButton
-
+                        if(world.kills >= 10 && gameOver < 2) {
+                            builder.setPositiveButton("Next Level",
+                                    new DialogInterface.OnClickListener() {
+                                        // called when "Reset Game" Button is pressed
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialogIsDisplayed = false;
+                                            newGame(getHolder()); // set up and start a new game
+                                        }
+                                    } // end anonymous inner class
+                            ); // end call to setPositiveButton
+                        }
+                        else{
+                            builder.setPositiveButton(R.string.reset_game,
+                                    new DialogInterface.OnClickListener() {
+                                        // called when "Reset Game" Button is pressed
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialogIsDisplayed = false;
+                                            gameOver = 0;
+                                            newGame(getHolder()); // set up and start a new game
+                                        }
+                                    } // end anonymous inner class
+                            ); // end call to setPositiveButton
+                        }
                         return builder.create(); // return the AlertDialog
                     } // end method onCreateDialog
                 }; // end DialogFragment anonymous inner class
@@ -180,7 +192,6 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (!dialogIsDisplayed) {
-            gameOver++;
             newGame(holder);
         }
     }
@@ -200,8 +211,11 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
 
     @Override
     public void onGameOver(boolean lost) {
-        gameOver = 1; // the game is over
+        gameOver++; // the game is over
         gameThread.stopGame(); // terminate thread
-        showGameOverDialog(R.string.lose); // show the losing dialog
+        if(lost)
+            showGameOverDialog(R.string.lose); // show the losing dialog
+        else
+            showGameOverDialog(R.string.win);
     }
 }

@@ -66,25 +66,21 @@ public class MyWorld extends World {
         bullet = new CreateBullet(this);
         bulletList.add(bullet);
         totalShots++;
-        //soundManager.playSound(SoundManager.FIRE_ID);
+        soundManager.playSound(SoundManager.FIRE_ID);
     }
     @Override
     public void update(float elapsedTimeMS){
         float interval = elapsedTimeMS / 1000.0F; // convert to seconds
         //decrease time
         timeLeft -= (double)interval; //decrease total time from time left
-        totalElapsedTime = 20.0 - timeLeft;
+        totalElapsedTime += interval;
         if(timeLeft <= 0.0){
-            listener.onGameOver(true);
+            listener.onGameOver(remaining > 0);
         }
         for(GameObject obj : objects){
             obj.update(interval);
         }
         List<GameObject> removed = new ArrayList<>();
-        if(remaining == 0){
-            winningState="You Won!";
-            listener.onGameOver(true);
-        }
         //check if any of the enemies were hit but any bullets
         for(GameObject bullet : bulletList){
             for(GameObject enemy : enemies){

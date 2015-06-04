@@ -22,7 +22,7 @@ public class MyWorld2 extends World {
     int numBullets;
     final int NUM_ENEMIES = 6;
     Random rand = new Random();
-
+    public int enemiesKilled;
 
     public MyWorld2(StateListener listener, SoundManager sounds) {
         super(listener, sounds);
@@ -31,6 +31,7 @@ public class MyWorld2 extends World {
         ship.collidesWith = 6;
         this.addObject(ship);
         addEnemies();
+        enemiesKilled = 0;
         numBullets = 0;
     }
 
@@ -52,6 +53,7 @@ public class MyWorld2 extends World {
                     bullet.position = shipPos;
                     bullet.speed = 350;
                     bullet.updateVelocity();
+                    totalShots++;
                 }
                 break;
             }
@@ -76,6 +78,7 @@ public class MyWorld2 extends World {
         bullet = new CreateBullet(this);
         numBullets++;
         bulletList.add(bullet);
+        soundManager.playSound(SoundManager.FIRE_ID);
     }
 
     public void enemyBullet(Point3F pos){
@@ -107,6 +110,19 @@ public class MyWorld2 extends World {
         for(int i = 0; i < NUM_ENEMIES; i++){
             Point3F pos = new Point3F(rand.nextInt(739) + 241, rand.nextInt(329) + 71, 0);
             this.addObject(new CreateEnemyMove(this, pos, this));
+        }
+    }
+
+    public void update(float elapsedTimeMS){
+        float interval = elapsedTimeMS / 1000.0F; // convert to seconds
+        for(GameObject obj : objects){
+            obj.update(interval);
+        }
+        if(enemiesKilled >= NUM_ENEMIES){
+            listener.onGameOver(false);
+        }
+        if(ship.isDead()){
+            listener.onGameOver(true);
         }
     }
 }

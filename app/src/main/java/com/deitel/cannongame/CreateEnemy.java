@@ -10,7 +10,7 @@ import edu.noctrl.craig.generic.World;
  * Created by Christian on 5/25/2015.
  */
 public class CreateEnemy extends GameSprite {
-    public static final Rect source = new Rect(192,0,255,63);
+    public static final Rect source = new Rect(128, 90, 149, 103);
     public static final Point3F scale = Point3F.identity();
 
     public CreateEnemy(World theWorld, Point3F pos){

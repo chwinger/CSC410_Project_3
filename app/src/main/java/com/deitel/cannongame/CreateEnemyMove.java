@@ -6,13 +6,14 @@ import java.util.Random;
 
 import edu.noctrl.craig.generic.GameSprite;
 import edu.noctrl.craig.generic.Point3F;
+import edu.noctrl.craig.generic.SoundManager;
 import edu.noctrl.craig.generic.World;
 
 /**
  * Created by Christian on 5/26/2015.
  */
 public class CreateEnemyMove extends GameSprite {
-    public static final Rect source = new Rect(192, 0, 255, 63);
+    public static final Rect source = new Rect(150, 90, 171, 103);
     public static final Point3F scale = Point3F.identity();
     Random rand;
     int randDir;
@@ -46,10 +47,14 @@ public class CreateEnemyMove extends GameSprite {
     @Override
     public void cull() {
         this.kill();
+        world.kills += 1;
+        world.score += 2;
+        worldCreated.enemiesKilled += 1;
     }
 
     @Override
     public void update(float interval) {
+        SoundManager manager = world.soundManager;
         randDir = rand.nextInt(100);
         if(((position.X > 980)
                 || (position.X < 240)
@@ -68,6 +73,7 @@ public class CreateEnemyMove extends GameSprite {
             position.add(velocity.clone().mult(interval));
             if(randDir < 2){
                 worldCreated.enemyBullet(position.clone());
+                manager.playSound(SoundManager.FIRE_ID);
             }
         }
         else {

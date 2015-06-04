@@ -43,7 +43,7 @@ public class SoundManager {
 	}
 	
 	public void playSound(int sound){
-		soundPool.play(sound, 1, 1, 1, 0, 1f);
+		soundPool.play(sound, (float)0.2, (float)0.2, 1, 0, 1f);
 	}
 	
 }
