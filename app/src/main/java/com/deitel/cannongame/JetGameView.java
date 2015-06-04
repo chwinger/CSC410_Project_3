@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -72,6 +73,9 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
         // register SurfaceHolder.Callback listener
         getHolder().addCallback(this);
         soundManager = new SoundManager(context);
+        MediaPlayer player = MediaPlayer.create(context, R.raw.mortal_kombat);
+        player.start();
+
         loadSprites();
     } // end CannonView constructor
 
@@ -87,16 +91,13 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
 
     // reset all the screen elements and start a new game
     public void newGame(SurfaceHolder holder) {
-        if(gameOver == 2){
-            // show the game over stage w/ final results.
-        }
-        else if(gameOver == 1){
+        if(gameOver == 1){
             world = new MyWorld2(this, soundManager);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread*/
             gameThread.start();
-            gameOver++;
+            //gameOver++;
         }
         else if (gameOver == 0) // starting a new game after the last game ended
         {

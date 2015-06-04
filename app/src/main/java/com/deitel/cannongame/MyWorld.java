@@ -92,6 +92,10 @@ public class MyWorld extends World {
                 if(CollisionDetection.collision(bullet, enemy)){hit = true;}
                 if(hit)
                 {
+                    kills += 1;
+                    remaining-=1;
+                    score += 2;
+                    timeLeft += 2.0; //increase time by 2
                     removed.add(enemy);
                     Log.i("DEBUG", "1 less guy, 1+ enemy, score + 3");
                 }
@@ -99,10 +103,6 @@ public class MyWorld extends World {
         }
         //bury the dead
         for(GameObject e : removed) {
-            kills += 1;
-            remaining-=1;
-            score += 2;
-            timeLeft += 2.0; //increase time by 2
             //add one more
             enemies.remove(e);
             addEnemies();
