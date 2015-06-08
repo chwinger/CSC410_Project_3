@@ -6,8 +6,12 @@ import android.app.Fragment;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class JetGameFragment extends Fragment {
     private JetGameView jetGameView; // custom view to display the game
@@ -22,6 +26,7 @@ public class JetGameFragment extends Fragment {
 
         // get the view
         jetGameView = (JetGameView) view.findViewById(R.id.cannonView);
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -46,6 +51,48 @@ public class JetGameFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         jetGameView.releaseResources();
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+        //return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.toLevel1:
+                //stop game and start that one?
+                jetGameView.stopGame();
+                jetGameView.setGameOver(0);
+                try{Thread.sleep(100);}catch(Exception e){/*eat*/}
+                jetGameView.newGame(jetGameView.getHolder());
+                Toast.makeText(getActivity(), "Going to level 1...", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.toLevel2:
+                jetGameView.stopGame();
+                jetGameView.setGameOver(1);
+                try{Thread.sleep(100);}catch(Exception e){/*eat*/}
+                jetGameView.newGame(jetGameView.getHolder());
+                Toast.makeText(getActivity(), "Going to level 2...", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.toLevel3:
+                jetGameView.stopGame();
+                jetGameView.setGameOver(2);
+                try{Thread.sleep(100);}catch(Exception e){/*eat*/}
+                jetGameView.newGame(jetGameView.getHolder());
+                Toast.makeText(getActivity(), "Going to level 3...", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.score:
+                //showHelp(); //launch popup menu
+                return true;
+            case R.id.about:
+                //showHelp();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 } // end class JetGameFragment
 

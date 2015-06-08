@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Jet Game</string>
+    <string name="level_1">Level 1</string>
+    <string name="level_2">Level 2</string>
+    <string name="level_3">Level 3</string>
+    <string name="about">About</string>
+    <string name="high_score">High Scores</string>
+    <string name="app_name">Project 4</string>
     <string name="results_format">Shots fired: %1$d\nKills: %2$d\nRemaining: %3$d\nScore: %4$d\nTotal time: %5$.1f</string>
     <string name="reset_game">Reset Game</string>
     <string name="win">You win!</string>

@@ -74,8 +74,8 @@ public class MyWorld extends World {
         //decrease time
         timeLeft -= (double)interval; //decrease total time from time left
         totalElapsedTime += interval;
-        if(timeLeft <= 0.0){
-            listener.onGameOver(remaining > 0);
+        if(timeLeft <= 0.0 || remaining <= 0){
+            listener.onGameOver(true);
         }
         for(GameObject obj : objects){
             obj.update(interval);
