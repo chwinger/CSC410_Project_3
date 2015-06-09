@@ -48,7 +48,7 @@ public class MyWorld3 extends World{
             addEnemies();
         }
         if(ship.isDead()){
-            //Add shipsDodged to public score here
+            score += enemiesDodged;
             listener.onGameOver(true);
         }
     }

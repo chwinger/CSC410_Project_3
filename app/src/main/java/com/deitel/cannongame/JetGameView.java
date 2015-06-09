@@ -11,12 +11,8 @@ import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-<<<<<<< HEAD
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.media.MediaPlayer;
-=======
->>>>>>> 7bb1e6ceeee18ec12eea2b6fa9ebdb846df60ad1
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -107,12 +103,20 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
         else if (gameOver == 0) // starting a new game after the last game ended
         {
 
+            world = new MyWorld(this, soundManager);
+            world.updateSize(screenWidth, screenHeight);
+            this.setOnTouchListener(world);
+            gameThread = new GameThread(holder, world); // create thread
+            gameThread.start(); // start the game loop thread
+        }
+        else{
             world = new MyWorld3(this, soundManager);
             mSensorManager.registerListener(world, mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_FASTEST);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread
             gameThread.start(); // start the game loop thread
+
         }
 
     } // end method newGame
@@ -230,8 +234,6 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
             showGameOverDialog(R.string.win);
     }
 
-<<<<<<< HEAD
-=======
     /**
      * should only be used for setting gameOver in the fragment.
      * @param gameState
@@ -239,5 +241,4 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
     public void setGameOver(int gameState){
         gameOver = gameState;
     }
->>>>>>> 7bb1e6ceeee18ec12eea2b6fa9ebdb846df60ad1
 }

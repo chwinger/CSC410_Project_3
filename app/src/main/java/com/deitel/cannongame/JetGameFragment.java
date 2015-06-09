@@ -30,11 +30,9 @@ public class JetGameFragment extends Fragment {
 
         // get the view
         jetGameView = (JetGameView) view.findViewById(R.id.cannonView);
-<<<<<<< HEAD
+
         mSensorManager = (SensorManager) getActivity().getSystemService(Activity.SENSOR_SERVICE);
-=======
         setHasOptionsMenu(true);
->>>>>>> 7bb1e6ceeee18ec12eea2b6fa9ebdb846df60ad1
         return view;
     }
 
