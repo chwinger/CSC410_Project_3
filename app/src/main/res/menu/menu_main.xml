@@ -1,5 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/action_settings" android:title=""
-        android:orderInCategory="100" android:showAsAction="never" />
+        android:orderInCategory="100" android:showAsAction="always" />
+
+    <item android:id="@+id/toLevel1"
+        android:title="@string/level_1" android:showAsAction="always"/>
+
+    <item android:id="@+id/toLevel2"
+        android:title="@string/level_2" android:showAsAction="always"/>
+
+    <item android:id="@+id/toLevel3"
+        android:title="@string/level_3" android:showAsAction="always"/>
+
+    <item android:id="@+id/score"
+        android:title="@string/high_score" android:showAsAction="always"/>
+
+    <item android:id="@+id/about"
+        android:title="@string/about" android:showAsAction="always"/>
 </menu>

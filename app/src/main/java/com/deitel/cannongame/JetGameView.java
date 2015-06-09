@@ -11,9 +11,12 @@ import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+<<<<<<< HEAD
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+=======
+>>>>>>> 7bb1e6ceeee18ec12eea2b6fa9ebdb846df60ad1
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -77,10 +80,9 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
         // register SurfaceHolder.Callback listener
         getHolder().addCallback(this);
         soundManager = new SoundManager(context);
-        MediaPlayer player = MediaPlayer.create(context, R.raw.mortal_kombat);
-        player.start();
-
         loadSprites();
+        //MediaPlayer player = MediaPlayer.create(context, R.raw.mortal_kombat);
+        //player.start();
     } // end CannonView constructor
 
     // called by surfaceChanged when the size of the SurfaceView changes,
@@ -228,4 +230,14 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
             showGameOverDialog(R.string.win);
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * should only be used for setting gameOver in the fragment.
+     * @param gameState
+     */
+    public void setGameOver(int gameState){
+        gameOver = gameState;
+    }
+>>>>>>> 7bb1e6ceeee18ec12eea2b6fa9ebdb846df60ad1
 }
