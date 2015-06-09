@@ -11,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -27,9 +29,9 @@ import edu.noctrl.craig.generic.World;
 public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, World.StateListener {
     private static final String TAG = "GameView"; // for logging errors
     private static final String SPRITE_FILE = "sprites.png";
-
+    public SensorManager mSensorManager;
     private GameThread gameThread; // controls the game loop
-    private World world;
+    public World world;
     private SoundManager soundManager;
     private Activity activity; // to display Game Over dialog in GUI thread
     private boolean dialogIsDisplayed = false;
@@ -70,6 +72,8 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
     public JetGameView(Context context, AttributeSet attrs) {
         super(context, attrs); // call superclass constructor
         activity = (Activity) context; // store reference to MainActivity
+        mSensorManager = (SensorManager) activity.getSystemService(Activity.SENSOR_SERVICE);
+
         // register SurfaceHolder.Callback listener
         getHolder().addCallback(this);
         soundManager = new SoundManager(context);
@@ -100,7 +104,9 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
         }
         else if (gameOver == 0) // starting a new game after the last game ended
         {
+
             world = new MyWorld3(this, soundManager);
+            mSensorManager.registerListener(world, mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_FASTEST);
             world.updateSize(screenWidth, screenHeight);
             this.setOnTouchListener(world);
             gameThread = new GameThread(holder, world); // create thread
@@ -191,6 +197,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
     // called when surface is first created
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        mSensorManager.registerListener(world, mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_FASTEST);
         if (!dialogIsDisplayed) {
             newGame(holder);
         }
@@ -201,6 +208,7 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
     public void surfaceDestroyed(SurfaceHolder holder) {
         // ensure that thread terminates properly
         boolean retry = true;
+        mSensorManager.unregisterListener(world);
         gameThread.stopGame(); // terminate cannonThread
 
         while (retry) {
@@ -212,10 +220,12 @@ public class JetGameView extends SurfaceView implements SurfaceHolder.Callback, 
     @Override
     public void onGameOver(boolean lost) {
         gameOver++; // the game is over
+        mSensorManager.unregisterListener(world);
         gameThread.stopGame(); // terminate thread
         if(lost)
             showGameOverDialog(R.string.lose); // show the losing dialog
         else
             showGameOverDialog(R.string.win);
     }
+
 }

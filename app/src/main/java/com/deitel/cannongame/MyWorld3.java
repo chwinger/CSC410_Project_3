@@ -2,7 +2,6 @@ package com.deitel.cannongame;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 
 import java.util.Random;
 
@@ -24,23 +23,10 @@ public class MyWorld3 extends World{
         ship = new CreateSprite(this);
         ship.substance = 2;
         ship.collidesWith = 6;
-        ship.speed = 200;
+        ship.speed = 500;
         this.addObject(ship);
         numBullets = 0;
         enemiesDodged = 0;
-        //SensorManager mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-
-        sel = new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-
-            }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-            }
-        };
     }
 
     public void addEnemies(){
@@ -58,20 +44,26 @@ public class MyWorld3 extends World{
         for(GameObject obj : objects){
             obj.update(interval);
         }
-        if(spawnEnemy < 10){
+        if(spawnEnemy < 2){
             addEnemies();
         }
         if(ship.isDead()){
+            //Add shipsDodged to public score here
             listener.onGameOver(true);
         }
     }
 
+
+    @Override
     public void onSensorChanged(SensorEvent event) {
         Point3F rotationDirection;
-        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
-            rotationDirection = new Point3F(event.values[0], event.values[1], 0);
-            ship.baseVelocity = rotationDirection.normalize();
-            ship.updateVelocity();
-        }
+        rotationDirection = new Point3F(-event.values[1], -event.values[0], 0);
+        ship.baseVelocity = rotationDirection;
+        ship.updateVelocity();
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }

@@ -3,6 +3,8 @@ package edu.noctrl.craig.generic;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,13 +14,23 @@ import java.util.ArrayList;
 /**
  * Created by craig_000 on 5/9/2015.
  */
-public class World implements View.OnTouchListener{
+public class World implements View.OnTouchListener, SensorEventListener{
     public static Object GUI_LOCKER = new Object();
     public static Resources resources;
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
         return true;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
     public static interface StateListener{

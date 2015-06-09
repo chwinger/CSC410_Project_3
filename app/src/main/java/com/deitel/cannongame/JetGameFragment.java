@@ -2,7 +2,10 @@
 // JetGameFragment creates and manages a CannonView
 package com.deitel.cannongame;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.view.ViewGroup;
 
 public class JetGameFragment extends Fragment {
     private JetGameView jetGameView; // custom view to display the game
+    public SensorManager mSensorManager;
 
     // called when Fragment's view needs to be created
     @Override
@@ -22,9 +26,15 @@ public class JetGameFragment extends Fragment {
 
         // get the view
         jetGameView = (JetGameView) view.findViewById(R.id.cannonView);
+        mSensorManager = (SensorManager) getActivity().getSystemService(Activity.SENSOR_SERVICE);
         return view;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        mSensorManager.registerListener(jetGameView.world, mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_FASTEST);
+    }
     // set up volume control once Activity is created
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
