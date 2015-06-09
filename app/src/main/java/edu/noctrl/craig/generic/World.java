@@ -3,6 +3,7 @@ package edu.noctrl.craig.generic;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.hardware.SensorEventListener;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by craig_000 on 5/9/2015.
  */
-public class World implements View.OnTouchListener {
+public class World implements View.OnTouchListener{
     public static Object GUI_LOCKER = new Object();
     public static Resources resources;
     @Override
@@ -26,6 +27,7 @@ public class World implements View.OnTouchListener {
     protected static final float TARGET_WIDTH = 540;
     protected static final float TARGET_HEIGHT = 960;
     protected static final float TARGET_PIXELS_PER_METER = 64F/30F;//ship len = 30m  ship base = 64px
+    protected SensorEventListener sel;
     public static float PIXELS_PER_METER = 64F/30F;//ship len = 30m  ship base = 64px
     public double totalElapsedTime = 0;
     public int width;
@@ -43,6 +45,7 @@ public class World implements View.OnTouchListener {
     public World(StateListener listener, SoundManager sounds){
         this.listener = listener;
         this.soundManager = sounds;
+
     }
 
     public void addObject(GameObject obj){
